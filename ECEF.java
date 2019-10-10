@@ -1,7 +1,7 @@
 import java.math.*;
 import java.util.*;
 
-class ECEF{
+class Main{
   public static void clear(){
   System.out.println("\033[H\033[2J");
   System.out.flush();
@@ -54,6 +54,8 @@ public static void ECEFtoLLA(){
   double A = 6378137.0;
   double B = 6356752.3;
   double ecc = 8.1819190842622e-2; //eccentricity
+  double e2 = Math.pow(ecc,2);
+  double N;
 
   System.out.println("Enter X value: ");
   x = scan.nextDouble();
@@ -75,19 +77,11 @@ public static void ECEFtoLLA(){
 
   Lat = Math.atan(lat_numerator / lat_denominator);
   Lon = Math.atan2(y, x);
-  
-  double temp = ecc*ecc*Math.sin(Lat)*Math.sin(Lat);
-  double N = 0.0;
-  if (temp < 0.0){
-    N = A;
-  }
-  else{
-    N = A / Math.sqrt(temp);
-  }
+  N = A / Math.sqrt(1-e2*Math.pow(Math.sin(Lat),2));
+  Alt = P / Math.cos(Lat) - N;
   
   Lat = Lat*180.0/Math.PI;
   Lon = Lon*180.0/Math.PI;
-  Alt = P / Math.cos(Lat) - N;
 
   System.out.println("\nLatitude: " + Lat);
   System.out.println("Longitude: " + Lon);
